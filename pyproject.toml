@@ -1,0 +1,28 @@
+[project]
+name = "call_me_maybe"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+	"numpy",
+    "pydantic",
+	"llm_sdk"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+lint = [
+	"flake8>=7.3.0",
+	"mypy>=2.1.0",
+]
+
+[tool.uv.sources]
+llm_sdk = { path = "./llm_sdk" }
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
