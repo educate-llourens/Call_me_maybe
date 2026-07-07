@@ -16,7 +16,7 @@ install:
 	uv venv
 	uv sync
 run:
-	uv run src/__main__.py
+	uv run python3 -m src
 
 debug:
 	
