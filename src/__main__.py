@@ -1,6 +1,7 @@
 import sys
 from .parsing import parsing
 from .classes import ParsingError, EncodingError
+from typing import Any
 try:
     from llm_sdk import Small_LLM_Model
 except Exception as error:
@@ -9,8 +10,10 @@ except Exception as error:
 
 
 def call_me_maybe() -> None:
+    input_data: tuple[Any, Any]
+
     try:
-        parsing()
+        input_data = parsing()
         encoding()
     except (ParsingError, EncodingError) as msg:
         print(msg)
