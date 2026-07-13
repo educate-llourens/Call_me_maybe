@@ -3,6 +3,8 @@
 # Description
 
 # Algorithm explanation
+???
+To do: Remove after project submission
 
 # Instructions
 1. Clone the repository: <br> 
@@ -15,10 +17,11 @@
 ## Documentation
 - [Qwen3 Documentation](https://huggingface.co/Qwen/Qwen3-0.6B)
 - [Python Documentation](https://docs.python.org/3/library/)
+- [Pydantic documentation](https://pydantic.dev/docs/validation/latest/get-started/)
 - [argparse tutorial](https://docs.python.org/3/howto/argparse.html#argparse-tutorial)
 
 ## AI Usage
-- Creating lessons for parts of the project using scaffolding teaching methods
+- Creating lessons for parts of the project using scaffolding teaching methods (no code answers)
 - Q & A sessions about topics I was not clear on
 - Creating quizzes and notes for learning
 
@@ -31,3 +34,6 @@
 # Challenges faced
 
 # Testing strategy
+
+# New Tools
+- [Python Formatter Beautifier](https://codebeautify.org/python-formatter-beautifier)

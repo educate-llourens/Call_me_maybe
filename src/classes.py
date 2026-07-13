@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Any
 
 
 class ParsingError(Exception):
@@ -12,10 +13,10 @@ class EncodingError(Exception):
 
 
 class FunctionCallingValidator(BaseModel):
-    prompt: str
+    prompt: dict
 
 
 class FunctionsDefinitionValidator(BaseModel):
     name: str
     description: str
-    parameters: str
+    parameters: dict[Any, Any]

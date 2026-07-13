@@ -1,6 +1,6 @@
 from .classes import ParsingError, EncodingError
-from .parsing import parsing
+from .input_checking import input_checking
 
 __all__ = ["ParsingError",
            "EncodingError",
-           "parsing"]
+           "input_checking"]
