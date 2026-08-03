@@ -10,13 +10,3 @@ class ParsingError(Exception):
 class EncodingError(Exception):
     def __init__(self, msg: str):
         super().__init__(f"Encoding Error: {msg}")
-
-
-class FunctionCallingValidator(BaseModel):
-    prompt: dict
-
-
-class FunctionsDefinitionValidator(BaseModel):
-    name: str
-    description: str
-    parameters: dict[Any, Any]
