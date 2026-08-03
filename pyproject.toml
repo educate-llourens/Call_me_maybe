@@ -6,6 +6,7 @@ dependencies = [
 	"numpy",
 	"pydantic",
 	"llm_sdk",
+	"colorama"
 ]
 
 [dependency-groups]
