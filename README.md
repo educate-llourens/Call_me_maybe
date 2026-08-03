@@ -13,6 +13,9 @@ To do: Remove after project submission
 2. Install the necessary packages and dependencies: <br>
 `make install`
 
+3. Activate the virtual environment: <br>
+`activate .venv/bin/activate`
+
 # Resources
 ## Documentation
 - [Qwen3 Documentation](https://huggingface.co/Qwen/Qwen3-0.6B)
@@ -34,6 +37,18 @@ To do: Remove after project submission
 # Challenges faced
 
 # Testing strategy
+I used unit tests with pytest as far as possible. Thereafter I used the provided testing program (Moulinette). 
+## Pytest
+| Command                       | What it tests |
+| ----------------------------- | -------------- |
+| `uv run pytest`               | All tests|
+| `uv run pytest -m parsing`    | Only the parsing tests |
+| `uv run pytest -m encoding`   | Only the encoding tests |
+| `uv run pytest -m decoding`   | Only the decoding tests |
+| `uv run pytest -m output`     | Only tests on the output JSON |
+
+## Moulinette
 
 # New Tools
 - [Python Formatter Beautifier](https://codebeautify.org/python-formatter-beautifier)
+- [colorama - Print coloured text](https://www.geeksforgeeks.org/python/introduction-to-python-colorama/)
