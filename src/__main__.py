@@ -16,14 +16,14 @@ def call_me_maybe() -> None:
             ValidationError) as msg:
         print(Fore.RED + msg)
         return
-    print(Fore.LIGHTBLUE_EX + "Encoding... ->", end=" " + Fore.WHITE)
-    print(functions_definition_list)
-    print("----------------------------")
-    print(input_prompts_list)
-    # Feed to model
-    # Get logits
-    # Decoding
-    # Format to JSON
+    for prompt_nbr, prompt in enumerate(input_prompts_list):
+        print(Fore.LIGHTBLUE_EX + f"Processing prompt number {prompt_nbr + 1}...")
+        print(Fore.GREEN + f"Prompt {prompt_nbr + 1}: Encoding...")
+        print(f"Prompt {prompt_nbr + 1}: Being fed to the model...")
+        print(f"Prompt {prompt_nbr + 1}: Processing logits...")
+        print(f"Prompt {prompt_nbr + 1}: Decoding...")
+        print(f"Prompt {prompt_nbr + 1}: Being added to the output file...")
+    print(Fore.LIGHTBLUE_EX + "\nAll prompts have been processed. Please check the output file")
 
 
 if __name__ == "__main__":
