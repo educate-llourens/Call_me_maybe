@@ -13,6 +13,7 @@ MYPY_FLAGS= --warn-return-any \
 all: run
 
 install:
+	pip install uv
 	uv venv
 	uv sync
 run:
@@ -36,9 +37,9 @@ bonfire:
 	rm -rf .pytest_cache
 
 lint:
-	flake8
-	python3 -m mypy . $(MYPY_FLAGS)
+	uv run flake8 --exclude=.venv,testing,llm_sdk
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/' . $(MYPY_FLAGS)
 
 lint-strict:
-	flake8
-	$(PYTHON) -m mypy . --strict
+	uv run flake8 --exclude=.venv,testing,llm_sdk
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/' . $(MYPY_FLAGS) --strict

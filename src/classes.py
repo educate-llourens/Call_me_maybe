@@ -1,6 +1,4 @@
 from pydantic import BaseModel, ValidationError, model_validator
-from typing import Any
-from enum import Enum
 
 
 class ParsingError(Exception):
@@ -20,7 +18,7 @@ class FunctionDefinitionValidation(BaseModel):
     returns: dict[str, str]
 
     @model_validator(mode="after")
-    def parameter_validation(self) -> FunctionDefinitionValidation:
+    def parameter_validation(self) -> "FunctionDefinitionValidation":
         for key in self.parameters.keys():
             if 'type' not in self.parameters[key]:
                 raise ValidationError("Cannot find the parameter "

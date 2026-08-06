@@ -5,7 +5,8 @@ from src.classes import (FunctionDefinitionValidation,
                          InputFileValidation)
 from typing import Any
 
-def input_checking() -> None:
+
+def input_checking() -> tuple[list[Any], list[Any]]:
     parser = ArgumentParser()
     parser.add_argument("--functions_definition",
                         default="data/input/functions_definition.json")
@@ -28,14 +29,18 @@ def input_checking() -> None:
 def check_definitions_json(definitions_json: Any) -> list[Any]:
     validated_definition_list: list[Any] = []
 
-    for definition in definitions_json:
-        validated_definition = FunctionDefinitionValidation(
-            name=definition["name"],
-            description=definition["description"],
-            parameters=definition["parameters"],
-            returns=definition["returns"]
-        )
-        validated_definition_list.append(validated_definition)
+    try:
+        for definition in definitions_json:
+            validated_definition = FunctionDefinitionValidation(
+                name=definition["name"],
+                description=definition["description"],
+                parameters=definition["parameters"],
+                returns=definition["returns"]
+            )
+            validated_definition_list.append(validated_definition)
+    except KeyError as msg:
+        raise KeyError("Key Error: In definitions JSON file, "
+                       f"{msg} is a missing key")
     return validated_definition_list
 
 
@@ -44,7 +49,7 @@ def check_input_list(input_json: Any) -> list[Any]:
 
     for prompt in input_json:
         validated_input = InputFileValidation(prompt=prompt["prompt"])
-        validated_input_list.append(prompt)
+        validated_input_list.append(validated_input)
     return validated_input_list
 
 # To do:
