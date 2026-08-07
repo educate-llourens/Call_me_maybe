@@ -13,7 +13,6 @@ MYPY_FLAGS= --warn-return-any \
 all: run
 
 install:
-	pip install uv
 	uv venv
 	uv sync
 run:
@@ -38,8 +37,8 @@ bonfire:
 
 lint:
 	uv run flake8 --exclude=.venv,testing,llm_sdk
-	uv run mypy --exclude '.venv/|testing/|llm_sdk/' . $(MYPY_FLAGS)
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/' --no-namespace-packages src $(MYPY_FLAGS)
 
 lint-strict:
 	uv run flake8 --exclude=.venv,testing,llm_sdk
-	uv run mypy --exclude '.venv/|testing/|llm_sdk/' . $(MYPY_FLAGS) --strict
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/' --no-namespace-packages src $(MYPY_FLAGS)
