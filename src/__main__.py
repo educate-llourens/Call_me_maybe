@@ -29,8 +29,7 @@ def call_me_maybe() -> None:
         print(Fore.LIGHTBLUE_EX +
               f"Processing prompt number {prompt_nbr + 1}...")
         print(Fore.GREEN + f"Prompt {prompt_nbr + 1}: Encoding...")
-        encoded_tokens = stage_encoding(functions_definition_list,
-                                        input_prompts_list, llm)
+        encoded_tokens = stage_encoding(functions_definition_list, prompt, llm)
         print(f"Prompt {prompt_nbr + 1}: Being fed to the model...")
         print(f"Prompt {prompt_nbr + 1}: Processing logits...")
         print(f"Prompt {prompt_nbr + 1}: Decoding...")
