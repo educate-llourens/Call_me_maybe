@@ -21,13 +21,14 @@ def input_checking() -> tuple[list[Any], list[Any]]:
         definitions_json = load(definitions_file)
         validated_definitions_list = check_definitions_json(definitions_json)
     with open(path_input_def, "r") as input_file:
-        input_json = load(input_file)
+        input_json: list[dict] = load(input_file)
         validated_input_list = check_input_list(input_json)
     return (validated_definitions_list, validated_input_list)
 
 
-def check_definitions_json(definitions_json: Any) -> list[Any]:
-    validated_definition_list: list[Any] = []
+def check_definitions_json(definitions_json: list[dict]) -> (
+                            list[FunctionDefinitionValidation]):
+    validated_definition_list: list[FunctionDefinitionValidation] = []
 
     try:
         for definition in definitions_json:
@@ -44,8 +45,8 @@ def check_definitions_json(definitions_json: Any) -> list[Any]:
     return validated_definition_list
 
 
-def check_input_list(input_json: Any) -> list[Any]:
-    validated_input_list: list[Any] = []
+def check_input_list(input_json: list[dict]) -> list[InputFileValidation]:
+    validated_input_list: list[InputFileValidation] = []
 
     for prompt in input_json:
         validated_input = InputFileValidation(prompt=prompt["prompt"])
