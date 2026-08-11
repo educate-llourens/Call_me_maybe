@@ -1,7 +1,7 @@
 from src.input_checking import input_checking
 from json import JSONDecodeError
 from pydantic import ValidationError
-from colorama import Fore, Back  # type: ignore[import-untyped]
+from colorama import Fore, Back
 from src.encoding import stage_encoding
 from llm_sdk import Small_LLM_Model
 from src.classes import FunctionDefinitionValidation, InputFileValidation

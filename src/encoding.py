@@ -10,13 +10,19 @@ def stage_encoding(functions_definition_list:
     tools: list[str] = [function.model_dump_json() for function in
                         functions_definition_list]
     instruction_prompt: str = (
-        f"Here are the tools you have: {'\n'.join(tools)}\n"
-        f"Here is the test prompt: {prompt.prompt}\n"
-        "Respond with the correct function call in correct JSON format. Here "
-        "is an example:\n"
-        "{'name': 'function_name',\n"
-        "'parameters': {'s': 'hello'}"
-        "}"
+        f"<|im_start|>system\n"
+        f"You are a function identifier and these are your tools\n "
+        f"<tool_call>{'\n'.join(tools)}</tool_call>\n"
+        f"Respond with the correct function call format. Here "
+        f"is an example:\n"
+        f"name: name of the function\n"
+        f"parameter_name: parameter1, parameter1 type, "
+        "paramater_name: parameter2, parameter2 type\n"
+        f"<|im_end|>\n"
+        f"<|im_start|>user\n"
+        f"{prompt.prompt}\n"
+        f"<|im_end|>\n"
+        f"<|im_start|>assistant\n"
     )
     tokens: Tensor = llm.encode(instruction_prompt)
     return tokens
