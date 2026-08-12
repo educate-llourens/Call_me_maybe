@@ -5,6 +5,7 @@ from colorama import Fore, Back
 from src.encoding import stage_encoding
 from llm_sdk import Small_LLM_Model
 from src.classes import FunctionDefinitionValidation, InputFileValidation
+from src.generation import stage_generation
 from torch import Tensor
 
 
@@ -15,6 +16,7 @@ def call_me_maybe() -> None:
     input_prompts_list: list[InputFileValidation]
     llm: Small_LLM_Model
     encoded_tokens: Tensor
+    # answer_tokens: Tensor
 
     print(Fore.LIGHTBLUE_EX + "Checking input... ->", end=" ")
     try:
@@ -34,6 +36,7 @@ def call_me_maybe() -> None:
         encoded_tokens = stage_encoding(functions_definition_list, prompt, llm)
         print(Fore.GREEN + "Encoding complete" + Fore.WHITE)
         print(Fore.LIGHTBLUE_EX + "Being fed to the model... ->", end=" ")
+        answer_tokens = stage_generation(llm, encoded_tokens)
         print(Fore.GREEN + "Model was successfully fed")
         print(Fore.LIGHTBLUE_EX + "Processing logits... ->", end=" ")
         print(Fore.GREEN + "Logits successfully processed")
@@ -43,7 +46,8 @@ def call_me_maybe() -> None:
               end=" ")
         print(Fore.GREEN + "Successfully added to the output file" +
               Fore.WHITE)
-    print(encoded_tokens)
+    # print(encoded_tokens)
+    print(answer_tokens)
     print(Fore.LIGHTBLUE_EX +
           "\nAll prompts have been processed. Please check the output file")
 

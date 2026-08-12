@@ -53,5 +53,5 @@ def check_input_list(input_json: list[dict]) -> list[InputFileValidation]:
         validated_input_list.append(validated_input)
     return validated_input_list
 
-# To do:
-# If there is time, check for duplicates
+# TODO: Docstrings
+# TODO: Handle duplicates
