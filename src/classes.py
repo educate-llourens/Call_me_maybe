@@ -11,6 +11,22 @@ class EncodingError(Exception):
         super().__init__(f"Encoding Error: {msg}")
 
 
+class ProcessingError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(f"Processing Error: {msg}")
+
+
+class DecodingError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(f"Decoding Error: {msg}")
+
+
+class OutputFileError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(
+            f"Output File Error Error: {msg}")
+
+
 class FunctionDefinitionValidation(BaseModel):
     name: str
     description: str

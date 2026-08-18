@@ -3,7 +3,8 @@ from torch import Tensor
 import numpy
 
 
-def stage_generation(llm: Small_LLM_Model, encoded_tokens: Tensor) -> Tensor:
+def stage_generation(llm: Small_LLM_Model,
+                     encoded_tokens: Tensor) -> list[int]:
     max_tokens: int = len(encoded_tokens * 2)
     encoded_tokens_int: list[int] = encoded_tokens[0].tolist()
     end_token: int | float = llm.encode("<|im_end|>")[0][-1].item()
@@ -15,4 +16,4 @@ def stage_generation(llm: Small_LLM_Model, encoded_tokens: Tensor) -> Tensor:
         encoded_tokens_int.append(next_token_id)
         if next_token_id == end_token:
             break
-    return Tensor(encoded_tokens_int)
+    return encoded_tokens_int

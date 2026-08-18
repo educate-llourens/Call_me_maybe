@@ -6,7 +6,8 @@ dependencies = [
 	"numpy",
 	"llm_sdk",
 	"accelerate",
-	"colorama"
+	"colorama",
+	"types-colorama>=0.4.15.20260508",
 ]
 
 [dependency-groups]

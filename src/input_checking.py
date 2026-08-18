@@ -55,3 +55,4 @@ def check_input_list(input_json: list[dict]) -> list[InputFileValidation]:
 
 # TODO: Docstrings
 # TODO: Handle duplicates
+# TODO: Handle empty file
