@@ -1,19 +1,31 @@
 from llm_sdk import Small_LLM_Model
-from torch import Tensor
-import numpy
+from numpy import argmax
 
 
-def stage_generation(llm: Small_LLM_Model,
-                     encoded_tokens: Tensor) -> list[int]:
-    max_tokens: int = len(encoded_tokens * 2)
-    encoded_tokens_int: list[int] = encoded_tokens[0].tolist()
-    end_token: int | float = llm.encode("<|im_end|>")[0][-1].item()
-    next_token_id: int = 0
+def generation(llm: Small_LLM_Model,
+               encoded_tokens: list[int]) -> list[int]:
+    """Takes the token id's, finds the highest logit and appends the token id
+    of the logit to the end of the prompt id's
 
-    for i in range(max_tokens):
-        logits: list[float] = llm.get_logits_from_input_ids(encoded_tokens_int)
-        next_token_id = int(numpy.argmax(logits))
-        encoded_tokens_int.append(next_token_id)
-        if next_token_id == end_token:
+    Notes:
+    - Yes/no or single-word answer → maybe 5-10 tokens
+    - A sentence or short answer → 50-100 tokens
+    - A paragraph → 200-500 tokens
+    - An essay, long code file, or detailed explanation → 1000-4000+ tokens
+    - argmax returns intp
+    Args:
+        llm (Small_LLM_Model): _description_
+        encoded_tokens (Tensor): _description_
+
+    Returns:
+        list[int]: _description_
+    """
+    nbr_tokens: int = 50
+
+    for _ in range(nbr_tokens):
+        logits: list[float] = llm.get_logits_from_input_ids(encoded_tokens)
+        next_id: int = int(argmax(logits))
+        encoded_tokens.append(next_id)
+        if next_id == int(llm.encode("<|im_end|>")[0][-1]):
             break
-    return encoded_tokens_int
+    return encoded_tokens

@@ -7,7 +7,7 @@ def function_name_encoding(
     functions_definition_list: list[FunctionDefinitionValidation],
     prompt: InputFileValidation,
     llm: Small_LLM_Model
-) -> Tensor:
+) -> list[int]:
     tools_list: list[str] = [function.model_dump_json() for function in
                              functions_definition_list]
     tools_str: str = "".join(f"\n{tool}" for tool in tools_list)
@@ -28,7 +28,7 @@ def function_name_encoding(
         "<|im_start|>assistant\n"
     )
     tokens: Tensor = llm.encode(instruction_prompt)
-    return tokens
+    return tokens[0].tolist()
 
 
 def parameter_encoding(
@@ -46,7 +46,7 @@ def parameter_encoding(
         "For each function call, return a string with the parameters"
         " within <tool_call></tool_call> XML tags:\n"
         "<tool_call>\n"
-        '<parameter 1>, <parameter 2>\n'
+        '<parameter 1> <paramter 2>\n'
         "</tool_call><|im_end|>\n"
         "<|im_start|>user\n"
         f"{prompt.prompt}<|im_end|>\n"
