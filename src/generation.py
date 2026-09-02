@@ -9,7 +9,7 @@ def function_name_process(
     functions_definition_list: list[FunctionDefinitionValidation],
     prompt: InputFileValidation
 ) -> None:
-    max_nbr_tokens = 48
+    max_nbr_tokens = 10
     remaining_functions: list[str] = [
         function.name for function in functions_definition_list]
     generated_tokens_str: str = ""

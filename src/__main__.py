@@ -48,7 +48,8 @@ def call_me_maybe() -> None:
     start_time = perf_counter()
     function_definitions, prompts_list = json_contents
     try:
-        function_name_process(llm, function_definitions, prompts_list[0])
+        for prompt in prompts_list:
+            function_name_process(llm, function_definitions, prompt)
         # parameters_process()
     except (EncodingError, ProcessingError, DecodingError,
             OutputFileError) as msg:
