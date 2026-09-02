@@ -19,7 +19,10 @@ def function_name_process(
     for _ in range(max_nbr_tokens):
         allowed_ids: set[int] = set()
         for name in remaining_functions:
-            allowed_ids.update(llm.encode(name)[0].tolist())
+            suffix = name[len(generated_tokens_str):]
+            if suffix:
+                first_token_id = llm.encode(suffix)[0].tolist()[0]
+                allowed_ids.add(first_token_id)
 
         logits: list[float] = llm.get_logits_from_input_ids(prompt_ids)
         for i in range(len(logits)):
@@ -27,12 +30,13 @@ def function_name_process(
                 logits[i] = float("-inf")
 
         next_id: int = int(argmax(logits))
-        generated_tokens_str += llm.decode([next_id])   # build up, not reset
-        prompt_ids += [next_id]                          # advance the input
+        generated_tokens_str += llm.decode([next_id])
+        prompt_ids += [next_id]
 
-        for function in remaining_functions:
-            if not function.startswith(generated_tokens_str):
-                remaining_functions.remove(function)
+        remaining_functions = [
+            function for function in remaining_functions
+            if function.startswith(generated_tokens_str)
+        ]
 
         if len(remaining_functions) == 1:
             print(remaining_functions[0])
@@ -40,11 +44,11 @@ def function_name_process(
         elif not remaining_functions:
             print("Could not find function")
             return
+
     print(generated_tokens_str)
     print("Could not find function")
 
 
-# Utility functions -----------------------------------------------------------
 def function_name_encoding(
     functions_definition_list: list[FunctionDefinitionValidation],
     prompt: InputFileValidation,
@@ -94,14 +98,3 @@ def parameter_encoding(
     )
     tokens: Tensor = llm.encode(instruction_prompt)
     return tokens
-
-
-def get_allowed_tokens_str(functions_definition_list:
-                           list[FunctionDefinitionValidation]) -> str:
-    allowed_tokens_str = ""
-    function_names_list: list[str] = [
-        function.name for function in functions_definition_list
-    ]
-    for function_name in function_names_list:
-        allowed_tokens_str += function_name + " "
-    return allowed_tokens_str
