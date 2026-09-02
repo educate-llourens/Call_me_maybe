@@ -1,7 +1,7 @@
 from src.input_checking import input_checking
 from json import JSONDecodeError
 from pydantic import ValidationError
-from colorama import Fore
+from colorama import Fore, Back
 from time import perf_counter
 from src.generation import function_name_process
 from src.classes import (FunctionDefinitionValidation, InputFileValidation,
@@ -43,14 +43,24 @@ def call_me_maybe() -> None:
             ValidationError, KeyError) as msg:
         print(Fore.RED + str(msg))
         return
+    print("")
     # TODO: Create loop going through list of tests
     # Start process -----------------------------------------------------------
     start_time = perf_counter()
     function_definitions, prompts_list = json_contents
     try:
+        i = 1
         for prompt in prompts_list:
-            function_name_process(llm, function_definitions, prompt)
-        # parameters_process()
+            print(Fore.LIGHTMAGENTA_EX + f"Prompt {i}: " + Fore.RESET)
+            print(Fore.LIGHTBLUE_EX + "Fetching function name..." + Fore.RESET)
+            function_name: str = function_name_process(
+                llm, function_definitions, prompt)
+            print(Back.LIGHTGREEN_EX + "Function name:" + Back.RESET +
+                  f" {function_name}")
+            print(Fore.LIGHTBLUE_EX + "Fetching parameters..." + Fore.RESET)
+            # parameters_process()
+            i += 1
+            print("")
     except (EncodingError, ProcessingError, DecodingError,
             OutputFileError) as msg:
         print(Fore.RED + f"{str(msg)}" + Fore.RESET)
