@@ -70,27 +70,3 @@ def function_name_encoding(
     )
     tokens: Tensor = llm.encode(instruction_prompt)
     return tokens[0].tolist()
-
-
-def parameter_encoding(
-    function_definition: FunctionDefinitionValidation,
-    prompt: InputFileValidation,
-    input_tests_list: list[InputFileValidation],
-    llm: Small_LLM_Model
-) -> Tensor:
-    instruction_prompt: str = (
-        "<|im_start|>system\n"
-        f"<tools>{function_definition}\n</tools>\n\n"
-        "Return a string with only the parameters"
-        " within <tool_call></tool_call>\n"
-        "#Example\n"
-        "<tool_call>\n"
-        "2 3\n"
-        "</tool_call><|im_end|>\n"
-        "<|im_start|>user\n"
-        f"{prompt.prompt}<|im_end|>\n"
-        "<|im_start|>assistant\n"
-        "<tool_call>\n"
-    )
-    tokens: Tensor = llm.encode(instruction_prompt)
-    return tokens
