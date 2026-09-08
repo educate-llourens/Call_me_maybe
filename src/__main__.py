@@ -62,13 +62,16 @@ def call_me_maybe() -> None:
                 llm, function_definitions, function_name, prompt)
             i += 1
             print("")
+            if perf_counter() >= 300000:
+                raise ProcessingError(f"Prompts 1 - {i} took too long "
+                                      "to process")
     except (EncodingError, ProcessingError, DecodingError,
             OutputFileError) as msg:
         print(Fore.RED + f"{str(msg)}" + Fore.RESET)
     end_time = perf_counter()
     print(Fore.LIGHTBLUE_EX + "All prompts processed in "
-          f"{(end_time - start_time) * 1000:.0f} Please check the data/output "
-          "folder" + Fore.RESET)
+          f"{(end_time - start_time) / 60:.2f} minutes. "
+          "Please check the data/output folder" + Fore.RESET)
 
     # Debug printing ----------------------------------------------------------
     print(calling_function_dict)
@@ -76,13 +79,3 @@ def call_me_maybe() -> None:
 
 if __name__ == "__main__":
     call_me_maybe()
-
-# {
-#     "prompt": "What is the sum of 2 and 3?"
-#   },
-#   {
-#     "prompt": "What is the sum of 265 and 345?"
-#   },
-#   {
-#     "prompt": "Greet shrek"
-#   },
