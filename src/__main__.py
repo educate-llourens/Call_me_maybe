@@ -57,6 +57,7 @@ def call_me_maybe() -> None:
                 llm, function_definitions, prompt)
             print(Back.LIGHTGREEN_EX + "Function name:" + Back.RESET +
                   f" {function_name}")
+            print("")
             print(Fore.LIGHTBLUE_EX + "Fetching parameters..." + Fore.RESET)
             calling_function_dict: dict = parameters_process(
                 llm, function_definitions, function_name, prompt)

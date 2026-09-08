@@ -14,7 +14,7 @@ def parameters_process(
     function_name: str,
     prompt: InputFileValidation
 ) -> dict:
-    fn_def = next(function for function in functions_definition_list if function.name == function_name)
+    fn_def: FunctionDefinitionValidation = next(function for function in functions_definition_list if function.name == function_name)
     base_prompt_ids = parameters_prompt_encoding(
         functions_definition_list, function_name, prompt, llm)
 
@@ -22,9 +22,13 @@ def parameters_process(
 
     for param_name in fn_def.parameters:          # you supply the key, not the model
         prompt_ids = base_prompt_ids + llm.encode(f'"{param_name}": ')[0].tolist()
-        value_str = generate_value(llm, prompt_ids)
+        print("")
+        print(Fore.LIGHTGREEN_EX + f"Getting {param_name} value...")
+        value_str = generate_value(llm, prompt_ids, param_name)
         result[param_name] = parse_value(value_str, fn_def.parameters[param_name]["type"])
-    print(result)
+        print(Fore.LIGHTGREEN_EX + "Return dict parameters keys: " + Fore.RESET + f"{result.keys()}")
+        print(Fore.LIGHTGREEN_EX + "Return dict parameters: " + Fore.RESET + f"{result}")
+    print(Back.LIGHTGREEN_EX + "Return json: " + Back.RESET + f"{result}")
     return result
 
 
@@ -48,8 +52,7 @@ def parse_value(value_str: str, param_type: str) -> Any:
             raise DecodingError(f"parse_value | unknown type {param_type!r}")
 
 
-def generate_value(llm: Small_LLM_Model, prompt_ids: list[int],
-                    max_nbr_tokens: int = 20) -> str:
+def generate_value(llm: Small_LLM_Model, prompt_ids: list[int], paramater_name: str, max_nbr_tokens: int = 20) -> str:
     generated = ""
     for _ in range(max_nbr_tokens):
         logits = llm.get_logits_from_input_ids(prompt_ids)
@@ -60,6 +63,7 @@ def generate_value(llm: Small_LLM_Model, prompt_ids: list[int],
         next_token = llm.decode([next_id])
         prompt_ids += [next_id]
         generated += next_token
+        print(Fore.LIGHTGREEN_EX + "Generated value: {" + f"'{paramater_name}': " + Fore.RESET + f"{generated}")
         stop_positions = [generated.find(ch) for ch in (",", "}") if ch in generated]
         if stop_positions:
             generated = generated[:min(stop_positions)]
