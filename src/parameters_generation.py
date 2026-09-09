@@ -1,35 +1,46 @@
 from llm_sdk import Small_LLM_Model
 from numpy import argmax
-from src.classes import FunctionDefinitionValidation, InputFileValidation, DecodingError
+from src.classes import (
+    FunctionDefinitionValidation, InputFileValidation, DecodingError)
 from torch import Tensor
 from colorama import Fore, Back
-from json import loads, JSONDecodeError
 from typing import Any
 
 
-# Test ------------------------------------------------------------------------
 def parameters_process(
     llm: Small_LLM_Model,
     functions_definition_list: list[FunctionDefinitionValidation],
     function_name: str,
     prompt: InputFileValidation
 ) -> dict:
-    fn_def: FunctionDefinitionValidation = next(function for function in functions_definition_list if function.name == function_name)
+    fn_def: FunctionDefinitionValidation = (
+        next(
+            function
+            for function in functions_definition_list
+            if function.name == function_name))
     base_prompt_ids = parameters_prompt_encoding(
         functions_definition_list, function_name, prompt, llm)
+    return_dict: dict = {}
 
-    result: dict = {}
-
-    for param_name in fn_def.parameters:          # you supply the key, not the model
-        prompt_ids = base_prompt_ids + llm.encode(f'"{param_name}": ')[0].tolist()
+    for param_name in fn_def.parameters:
+        prompt_ids = (
+            base_prompt_ids + llm.encode(f'"{param_name}": ')[0].tolist())
         print("")
         print(Fore.LIGHTGREEN_EX + f"Getting {param_name} value...")
         value_str = generate_value(llm, prompt_ids, param_name)
-        result[param_name] = parse_value(value_str, fn_def.parameters[param_name]["type"])
-        print(Fore.LIGHTGREEN_EX + "Return dict parameters keys: " + Fore.RESET + f"{result.keys()}")
-        print(Fore.LIGHTGREEN_EX + "Return dict parameters: " + Fore.RESET + f"{result}")
-    print(Back.LIGHTGREEN_EX + "Return json: " + Back.RESET + f"{result}")
-    return result
+        return_dict[param_name] = (
+            parse_value(value_str, fn_def.parameters[param_name]["type"]))
+        print(Fore.LIGHTGREEN_EX +
+              "Return dict parameters keys: " +
+              Fore.RESET +
+              f"{return_dict.keys()}")
+        print(
+            Fore.LIGHTGREEN_EX +
+            "Return dict parameters: " +
+            Fore.RESET +
+            f"{return_dict}")
+    print(Back.LIGHTGREEN_EX + "Return json: " + Back.RESET + f"{return_dict}")
+    return return_dict
 
 
 def parse_value(value_str: str, param_type: str) -> Any:
@@ -53,23 +64,24 @@ def parse_value(value_str: str, param_type: str) -> Any:
 
 
 def generate_value(llm: Small_LLM_Model, prompt_ids: list[int], paramater_name: str, max_nbr_tokens: int = 20) -> str:
-    generated = ""
+    generated_str = ""
     for _ in range(max_nbr_tokens):
-        logits = llm.get_logits_from_input_ids(prompt_ids)
-        if len(prompt_ids) >= 2 and prompt_ids[-1] == prompt_ids[-2]:
-            logits = logits[:]
-            logits[prompt_ids[-1]] = float("-inf")
+        logits: list[float] = llm.get_logits_from_input_ids(prompt_ids)
         next_id = int(argmax(logits))
-        next_token = llm.decode([next_id])
         prompt_ids += [next_id]
-        generated += next_token
-        print(Fore.LIGHTGREEN_EX + "Generated value: {" + f"'{paramater_name}': " + Fore.RESET + f"{generated}")
-        stop_positions = [generated.find(ch) for ch in (",", "}") if ch in generated]
+        generated_str += llm.decode([next_id])
+        print(
+            Fore.LIGHTGREEN_EX +
+            "Generated value: {" +
+            f"'{paramater_name}': " +
+            Fore.RESET +
+            f"{generated_str}")
+        stop_positions = [
+            generated_str.find(ch) for ch in (",", "}") if ch in generated_str]
         if stop_positions:
-            generated = generated[:min(stop_positions)]
+            generated_str = generated_str[:min(stop_positions)]
             break
-    return generated.rstrip(", }").strip()
-# -----------------------------------------------------------------------------
+    return generated_str.rstrip(", }").strip()
 
 
 def parameters_prompt_encoding(
