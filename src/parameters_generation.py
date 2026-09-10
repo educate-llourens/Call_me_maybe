@@ -63,7 +63,8 @@ def parse_value(value_str: str, param_type: str) -> Any:
             raise DecodingError(f"parse_value | unknown type {param_type!r}")
 
 
-def generate_value(llm: Small_LLM_Model, prompt_ids: list[int], paramater_name: str, max_nbr_tokens: int = 20) -> str:
+def generate_value(llm: Small_LLM_Model, prompt_ids: list[int],
+                   paramater_name: str, max_nbr_tokens: int = 20) -> str:
     generated_str = ""
     for _ in range(max_nbr_tokens):
         logits: list[float] = llm.get_logits_from_input_ids(prompt_ids)
@@ -108,6 +109,7 @@ def parameters_prompt_encoding(
         "#Example\n"
         "<parameters>\n"
         '{"parameters": {"regex": "\\d+", ...}}\n'
+        "Case sensitivity is important"
         "</parameters><|im_end|>\n"
         "<|im_start|>user\n"
         f"{prompt.prompt}<|im_end|>\n"

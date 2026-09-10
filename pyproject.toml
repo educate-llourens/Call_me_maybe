@@ -8,6 +8,7 @@ dependencies = [
 	"accelerate",
 	"colorama",
 	"types-colorama>=0.4.15.20260508",
+	"fire>=0.7.1",
 ]
 
 [dependency-groups]

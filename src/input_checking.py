@@ -23,7 +23,8 @@ def input_checking() -> tuple[list[Any], list[Any]]:
     with open(path_input_def, "r") as input_file:
         input_json: list[dict] = load(input_file)
         validated_input_list = check_input_list(input_json)
-    return (validated_definitions_list, validated_input_list)
+    return (validated_definitions_list, validated_input_list,
+            Path(args.output))
 
 
 def check_definitions_json(definitions_json: list[dict]) -> (
