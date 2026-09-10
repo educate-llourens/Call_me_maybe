@@ -13,6 +13,20 @@ def parameters_process(
     function_name: str,
     prompt: InputFileValidation
 ) -> dict:
+    """Extracts the parameters for the given prompt based on the function name
+    and its definition dict. 
+
+    Args:
+        llm (Small_LLM_Model): LLM Instance
+        functions_definition_list (list[FunctionDefinitionValidation]):
+        List of validated function definitions
+        function_name (str): Name of the function to extract the parameters
+        for
+        prompt (InputFileValidation): The validated prompt
+
+    Returns:
+        dict: The dict of parameters
+    """
     fn_def: FunctionDefinitionValidation = (
         next(
             function
@@ -54,7 +68,7 @@ def parse_value(value_str: str, param_type: str) -> Any:
         case "number":
             return float(value_str)
         case "integer":
-            return int(float(value_str))   # handles "2.0" -> 2 safely
+            return int(float(value_str))
         case "string":
             return value_str
         case "boolean":
@@ -65,6 +79,19 @@ def parse_value(value_str: str, param_type: str) -> Any:
 
 def generate_value(llm: Small_LLM_Model, prompt_ids: list[int],
                    paramater_name: str, max_nbr_tokens: int = 20) -> str:
+    """Generates the value for the parameter name
+
+    Args:
+        llm (Small_LLM_Model): LLM instance
+        prompt_ids (list[int]): List of id's from the encoded prompt
+        paramater_name (str): The name or key that we need to find the value
+        for max_nbr_tokens (int, optional): The maximum number of tokens to
+        loop through to keep processing minimal and ensure it does not
+        take too much time and resources. Defaults to 20.
+
+    Returns:
+        str: The generated value as a string.
+    """
     generated_str = ""
     for _ in range(max_nbr_tokens):
         logits: list[float] = llm.get_logits_from_input_ids(prompt_ids)
@@ -91,6 +118,19 @@ def parameters_prompt_encoding(
     prompt: InputFileValidation,
     llm: Small_LLM_Model
 ) -> list[int]:
+    """Creates the prompt to look for parameters and encodes the prompt
+
+    Args:
+        functions_definition_list (list[FunctionDefinitionValidation]):
+        List of validated function definitions
+        function_name (str): Name of the function we need to call
+        prompt (InputFileValidation): Validated prompt we need to extract the
+        parameters from
+        llm (Small_LLM_Model): LLM instance
+
+    Returns:
+        list[int]: List of id's from the encoded prompt
+    """
     tools_list: list[str] = [
         function.model_dump_json() for function in functions_definition_list]
     tools_str: str = "".join(f"\n{tool}" for tool in tools_list)

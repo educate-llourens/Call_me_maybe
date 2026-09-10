@@ -38,7 +38,7 @@ def check_definitions_json(definitions_json: list[dict]) -> (
     """Checks the functions definitions are correct
 
     Args:
-        definitions_json (list[dict]): list of function definitions
+        definitions_json (list[dict]): List of function definitions
         as a list of unchecked dicts
 
     Raises:

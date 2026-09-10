@@ -10,6 +10,17 @@ def function_name_process(
     functions_definition_list: list[FunctionDefinitionValidation],
     prompt: InputFileValidation
 ) -> str:
+    """Retrieves and returns the function name
+
+    Args:
+        llm (Small_LLM_Model): The LLM instance
+        functions_definition_list (list[FunctionDefinitionValidation]):
+        Validated list of function definitions
+        prompt (InputFileValidation): Validated prompt
+
+    Returns:
+        str: The function name
+    """
     max_nbr_tokens = 10
     remaining_functions: list[str] = [
         function.name for function in functions_definition_list]
@@ -50,6 +61,17 @@ def function_name_encoding(
     prompt: InputFileValidation,
     llm: Small_LLM_Model
 ) -> list[int]:
+    """Creates the prompt and returns the token id's of the prompt
+
+    Args:
+        functions_definition_list (list[FunctionDefinitionValidation]):
+        List of function definitions
+        prompt (InputFileValidation): Validated prompt
+        llm (Small_LLM_Model): LLM instance
+
+    Returns:
+        list[int]: List of id's
+    """
     tools_list: list[str] = [function.model_dump_json() for function in
                              functions_definition_list]
     tools_str: str = "".join(f"\n{tool}" for tool in tools_list)
