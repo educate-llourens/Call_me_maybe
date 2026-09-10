@@ -1,4 +1,4 @@
-MAIN= call_me_maybe.py
+MAIN= src/__main__.py
 VENV_DIR= .venv
 BIN_DIR= $(VENV_DIR)/bin
 PYTHON= $(BIN_DIR)/python3
@@ -15,30 +15,27 @@ all: run
 install:
 	uv venv
 	uv sync
+
 run:
 	uv run python3 -m src
 
 debug:
-	
-
-test:
-	pytest
+	$(PYTHON) -m pdb $(MAIN)
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
+	rm -rf data/output/
+	rm -rf data/correction
 
-bonfire:
-	find . -type d -name "__pycache__" -exec rm -rf {} +
-	rm -rf .mypy_cache
+bonfire: clean
 	rm -rf $(VENV_DIR)
-	rm -rf .pytest_cache
 
 lint:
-	uv run flake8 --exclude=.venv,testing,llm_sdk
-	uv run mypy --exclude '.venv/|testing/|llm_sdk/' --no-namespace-packages src $(MYPY_FLAGS)
+	uv run flake8 --exclude=.venv,testing,llm_sdk,moulinette
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/|moulinette/' --no-namespace-packages src $(MYPY_FLAGS)
 
 lint-strict:
-	uv run flake8 --exclude=.venv,testing,llm_sdk
-	uv run mypy --exclude '.venv/|testing/|llm_sdk/' --no-namespace-packages src $(MYPY_FLAGS)
+	uv run flake8 --exclude=.venv,testing,llm_sdk,moulinette
+	uv run mypy --exclude '.venv/|testing/|llm_sdk/moulinette/' --no-namespace-packages src $(MYPY_FLAGS)

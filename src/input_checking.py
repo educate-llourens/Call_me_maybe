@@ -6,7 +6,13 @@ from src.classes import (FunctionDefinitionValidation,
 from typing import Any
 
 
-def input_checking() -> tuple[list[Any], list[Any]]:
+def input_checking() -> tuple[list[Any], list[Any], Path]:
+    """Handles argumant flags and checks input is correct
+
+    Returns:
+        tuple[list[Any], list[Any], Path]: Returns the list of function
+        definitions, list of prompts and the path for the output file.
+    """
     parser = ArgumentParser()
     parser.add_argument("--functions_definition",
                         default="data/input/functions_definition.json")
@@ -29,6 +35,20 @@ def input_checking() -> tuple[list[Any], list[Any]]:
 
 def check_definitions_json(definitions_json: list[dict]) -> (
                             list[FunctionDefinitionValidation]):
+    """Checks the functions definitions are correct
+
+    Args:
+        definitions_json (list[dict]): list of function definitions
+        as a list of unchecked dicts
+
+    Raises:
+        KeyError: Raises a KeyError of the function definition is not
+        the correct format.
+
+    Returns:
+        list[FunctionDefinitionValidation]: The validated list of
+        function definitions
+    """
     validated_definition_list: list[FunctionDefinitionValidation] = []
 
     try:
@@ -47,13 +67,17 @@ def check_definitions_json(definitions_json: list[dict]) -> (
 
 
 def check_input_list(input_json: list[dict]) -> list[InputFileValidation]:
+    """Checks the list of prompts
+
+    Args:
+        input_json (list[dict]): The list of prompts
+
+    Returns:
+        list[InputFileValidation]: The validated list of prompts
+    """
     validated_input_list: list[InputFileValidation] = []
 
     for prompt in input_json:
         validated_input = InputFileValidation(prompt=prompt["prompt"])
         validated_input_list.append(validated_input)
     return validated_input_list
-
-# TODO: Docstrings
-# TODO: Handle duplicates
-# TODO: Handle empty file
