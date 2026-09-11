@@ -74,7 +74,7 @@ def call_me_maybe() -> None:
         print(Fore.RED + f"{str(msg)}" + Fore.RESET)
     try:
         create_output_file(output_function_list, output_file_path)
-    except (OutputFileError, FileExistsError) as msg:
+    except (OutputFileError) as msg:
         print(Fore.RED + f"{str(msg)}" + Fore.RESET)
     end_time = perf_counter()
     print(Fore.LIGHTBLUE_EX + "All prompts processed in "

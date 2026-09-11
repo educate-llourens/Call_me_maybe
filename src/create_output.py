@@ -1,7 +1,7 @@
 from json import dump
 from pathlib import Path
 from colorama import Fore, Back
-from src.classes import InputFileValidation
+from src.classes import InputFileValidation, OutputFileError
 
 
 def create_function_output_dict(
@@ -48,5 +48,5 @@ def create_output_file(output_function_list: list[dict],
             print(Back.GREEN +
                   "File successfully created" +
                   Back.RESET)
-    except FileExistsError as msg:
-        raise FileExistsError(f"File not created | {msg}")
+    except (FileExistsError, PermissionError) as msg:
+        raise OutputFileError(f"{msg}")

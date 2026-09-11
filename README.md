@@ -94,8 +94,8 @@ Letting the model freely generate an entire JSON object — keys included — op
 
 # Performance analysis
 **Home PC:** 11 Prompts in 0.11 minutes <br>
-**Old Mac:** 11 Prompts in 8.08 minutes <br>
-**Codam upstairs computers:** 11 Prompts in 
+**Old Mac laptop:** 11 Prompts in 8.08 minutes <br>
+**Codam upstairs computers:** 11 Prompts in 3.25 minutes
 
 # Design decisions
 **Greedy decoding over sampling**<br>
@@ -146,3 +146,7 @@ SCORE: 10/11
 # New Tools
 - [Python Formatter Beautifier](https://codebeautify.org/python-formatter-beautifier)
 - [colorama - Print coloured text](https://www.geeksforgeeks.org/python/introduction-to-python-colorama/)
+
+# Things I would improve if I had more time
+- Prompt 9 failing, a prompt adjustment should fix this. It will increase the running time slightly but what  have now is good enough for an evaluation
+- Done unit testing with pytest. I enjoy making th tests but it takes time I do not have

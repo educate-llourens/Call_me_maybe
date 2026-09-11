@@ -14,7 +14,7 @@ def parameters_process(
     prompt: InputFileValidation
 ) -> dict:
     """Extracts the parameters for the given prompt based on the function name
-    and its definition dict. 
+    and its definition dict.
 
     Args:
         llm (Small_LLM_Model): LLM Instance
@@ -64,17 +64,19 @@ def parse_value(value_str: str, param_type: str) -> Any:
     """
     value_str = value_str.strip().strip('"').strip("'")
 
-    match param_type:
-        case "number":
+    try:
+        if param_type == "number":
             return float(value_str)
-        case "integer":
+        elif param_type == "integer":
             return int(float(value_str))
-        case "string":
+        elif param_type == "string":
             return value_str
-        case "boolean":
+        elif param_type == "boolean":
             return value_str.lower() == "true"
-        case _:
-            raise DecodingError(f"parse_value | unknown type {param_type!r}")
+        else:
+            raise DecodingError(f"parse_value | unknown type {param_type}")
+    except ValueError as msg:
+        raise DecodingError(f"Value Error | {value_str}: {msg}")
 
 
 def generate_value(llm: Small_LLM_Model, prompt_ids: list[int],

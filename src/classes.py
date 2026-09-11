@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, model_validator
+from pydantic import BaseModel, model_validator
 
 
 class ParsingError(Exception):
@@ -73,8 +73,8 @@ class FunctionDefinitionValidation(BaseModel):
     def parameter_validation(self) -> "FunctionDefinitionValidation":
         for key in self.parameters.keys():
             if 'type' not in self.parameters[key]:
-                raise ValidationError("Cannot find the parameter "
-                                      f"type for {key}")
+                raise ParsingError("Cannot find the parameter "
+                                   f"type for {key}")
         return self
 
 

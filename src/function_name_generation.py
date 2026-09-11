@@ -53,6 +53,7 @@ def function_name_process(
             return (remaining_functions[0])
         elif not remaining_functions:
             print(f"We could not find a matching function for {prompt}")
+            break
     return ""
 
 
